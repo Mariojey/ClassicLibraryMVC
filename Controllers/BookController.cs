@@ -1,35 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ClassicLibraryMVC.Models;
+using Microsoft.EntityFrameworkCore;
+using ClassicLibraryMVC.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ClassicLibraryMVC.Controllers
 {
     public class BookController : Controller
     {
-        public IActionResult Overview()
+        private readonly LibraryContext _context;
+
+        public BookController(LibraryContext context)
         {
-            var books = new List<Book>
-            {
-                new Book { Id = 0, Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", PublicationYear = 1925 },
-                new Book { Id = 1, Title = "Quo Vadis", Author = "Henryk Sienkiewicz", PublicationYear = 1905},
-                new Book { Id = 2, Title = "Ice", Author = "Jacek Dukaj", PublicationYear=2007}
-            };
+            _context = context;
+        }
 
-
-
+        public async Task<IActionResult> Index()
+        {
+            var books = await _context.Books.ToListAsync();
             return View(books);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var books = new List<Book>
+            var book = await _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.PublishingHouse)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            return View(book);
+        }
+
+        public IActionResult Create() 
+        {
+            //ViewBag.Authors = await _context.Authors.ToListAsync();
+
+            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames", "Names");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Book book)
+        {
+            if (ModelState.IsValid)
             {
-                new Book { Id = 0, Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", PublicationYear = 1925 },
-                new Book { Id = 1, Title = "Quo Vadis", Author = "Henryk Sienkiewicz", PublicationYear = 1905},
-                new Book { Id = 2, Title = "Ice", Author = "Jacek Dukaj", PublicationYear=2007}
-            };
+                await _context.Books.AddAsync(book);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
 
-            var book = books.FirstOrDefault(books => books.Id == id);
-
+            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames", "Names", book.AuthorId.ToString());
             return View(book);
         }
     }

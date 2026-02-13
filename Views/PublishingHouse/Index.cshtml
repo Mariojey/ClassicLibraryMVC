@@ -1,0 +1,17 @@
+﻿@using ClassicLibraryMVC.Models
+@model List<PublishingHouse>
+@{
+    ViewData["Title"] = "Publishing House Overview";
+}
+<h1>Book Overview</h1>
+
+<ul>
+    @foreach (var publishingHouse in Model)
+    {
+        <li>
+            @* <a href="@Url.Action("Details", "Book", new { id = book.Id })">@book.Title</a> *@
+            <p>@publishingHouse.Name</p> <br />
+        </li>
+    }
+</ul>
+

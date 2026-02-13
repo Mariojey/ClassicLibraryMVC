@@ -1,0 +1,26 @@
+﻿@using ClassicLibraryMVC.Models
+@model Author
+@{
+    ViewData["Title"] = "Create Author";
+}
+
+<h1>Create Author</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Surnames"></label>
+        <input asp-for="Surnames" class="form-control" />
+        <span asp-validation-for="Surnames" class="text-danger"></span>
+    </div>
+    @* <div class="form-group">
+        <label asp-for="Author"></label>
+        <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.Authors"></select>
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div> *@
+    <div class="form-group">
+        <label asp-for="Names"></label>
+        <input asp-for="Names" class="form-control" />
+        <span asp-validation-for="Names" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

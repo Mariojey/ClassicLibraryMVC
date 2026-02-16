@@ -31,17 +31,26 @@ namespace ClassicLibraryMVC.Controllers
             return View(book);
         }
 
-        public IActionResult Create() 
+        public async Task<IActionResult> Create() 
         {
             //ViewBag.Authors = await _context.Authors.ToListAsync();
 
-            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames", "Names");
+            var authors = await _context.Authors.ToListAsync();
+            var publishingHouses = await _context.PublishingHouses.ToListAsync();
+
+            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames");
+            ViewBag.PublishingHouses = new SelectList(_context.PublishingHouses, "Id", "Name");
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Book book)
         {
+            Console.WriteLine("DEBUG");
+            Console.WriteLine(book is null ? "<book is null>" : $"AuthorId: {book.AuthorId}");
+            Console.WriteLine(book is null ? "<book is null>" : $"PublishingHouseId: {book.PublishingHouseId}");
+            Console.WriteLine(book is null ? "<book is null>" : $"Title: {book.Title}");
+
             if (ModelState.IsValid)
             {
                 await _context.Books.AddAsync(book);
@@ -49,7 +58,22 @@ namespace ClassicLibraryMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames", "Names", book.AuthorId.ToString());
+            Console.WriteLine("ModelState is invalid. Errors:");
+            foreach (var kv in ModelState)
+            {
+                var key = kv.Key;
+                foreach (var err in kv.Value.Errors)
+                {
+                    Console.WriteLine($" - {key}: {err.ErrorMessage} {(err.Exception != null ? err.Exception.Message : "")}");
+                }
+            }
+
+            var authors = await _context.Authors.ToListAsync();
+            var publishingHouses = await _context.PublishingHouses.ToListAsync();
+
+            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames", book?.AuthorId);
+            ViewBag.PublishingHouses = new SelectList(_context.PublishingHouses, "Id", "Name", book?.PublishingHouseId);
+
             return View(book);
         }
     }

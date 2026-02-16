@@ -16,6 +16,6 @@ namespace ClassicLibraryMVC.Models
         [Required]
         public string Surnames { get; set; } = string.Empty;
 
-        public List<Book> ? Books { get; set; }
+        public ICollection<Book> Books { get; set;  } = new List<Book>();
     }
 }

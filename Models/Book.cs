@@ -18,14 +18,15 @@ namespace ClassicLibraryMVC.Models
 
         [Required]
         public int AuthorId { get; set; }
+
         [ForeignKey("AuthorId")]
-        public required Author Author { get; set; }
+        public Author ? Author { get; set; }
 
         [Required]
         public int PublishingHouseId { get; set; }
-        [ForeignKey("PublishingHouseId")]
-        public required PublishingHouse PublishingHouse { get; set; }
 
+        [ForeignKey("PublishingHouseId")]
+        public PublishingHouse ? PublishingHouse { get; set; }
         public int ? UserId { get; set; }
         [ForeignKey("UserId")]
         public User ? User { get; set; }

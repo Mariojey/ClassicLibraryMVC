@@ -23,6 +23,6 @@ namespace ClassicLibraryMVC.Models
         public string Password { get; set; } = string.Empty;
 
 
-        public List<Book> ? BorrowedBooks { get; set; }
+        public ICollection<Book> BorrowedBooks { get; set; } = new List<Book>();
     }
 }

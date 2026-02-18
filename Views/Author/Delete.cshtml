@@ -1,0 +1,15 @@
+﻿@using ClassicLibraryMVC.Models
+@model Author
+@{
+    ViewData["Title"] = "Delete Author";
+}
+
+<h1>Delete Author</h1>
+
+<h3>Are you sure about that</h3>
+
+<form asp-action="Delete" method="post">
+     <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

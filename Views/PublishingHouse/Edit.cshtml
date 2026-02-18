@@ -1,0 +1,27 @@
+﻿@using ClassicLibraryMVC.Models
+@model PublishingHouse
+@{
+    ViewData["Title"] = "Edit Publishing House";
+}
+
+<h1>Edit Publishing House</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    @* <div class="form-group">
+        <label asp-for="Author"></label>
+        <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.Authors"></select>
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div> *@
+    <div class="form-group">
+        <label asp-for="Country"></label>
+        <input asp-for="Country" class="form-control" />
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Edit</button>
+</form>
+

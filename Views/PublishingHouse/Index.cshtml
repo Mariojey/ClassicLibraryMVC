@@ -11,6 +11,8 @@
         <li>
             @* <a href="@Url.Action("Details", "Book", new { id = book.Id })">@book.Title</a> *@
             <p>@publishingHouse.Name</p> <br />
+            <a asp-action="Edit" asp-route-id="@publishingHouse.Id">Edit</a>
+            <a asp-action="Delete" asp-route-id="@publishingHouse.Id">Delete</a>
         </li>
     }
 </ul>

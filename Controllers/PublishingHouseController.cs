@@ -95,6 +95,33 @@ namespace ClassicLibraryMVC.Controllers
         {
             return _context.PublishingHouses.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> Delete (int id)
+        {
+            var publishingHouse = await _context.PublishingHouses.FindAsync(id);
+
+            if (publishingHouse == null)
+            {
+                return NotFound();
+            }
+
+            return View(publishingHouse);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var publishingHouse = await _context.PublishingHouses.FindAsync(id);
+
+            if(publishingHouse == null)
+            {
+                return NotFound();
+            }
+
+            _context.PublishingHouses.Remove(publishingHouse);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
 

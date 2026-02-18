@@ -11,6 +11,8 @@
     {
         <li>
             <a href="@Url.Action("Details", "Author", new { id = author.Id })">@author.Surnames @author.Names</a>
+            <a asp-action="Edit" asp-route-id="@author.Id">Edit</a>
+            <a asp-action="Delete" asp-route-id="@author.Id">Delete</a>
         </li>
 }   
 </ul>

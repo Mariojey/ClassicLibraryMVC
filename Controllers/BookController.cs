@@ -76,5 +76,73 @@ namespace ClassicLibraryMVC.Controllers
 
             return View(book);
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var book = await _context.Books.FindAsync(id);
+
+            if(book == null)
+            {
+                return NotFound();
+            }
+
+            var authors = await _context.Authors.ToListAsync();
+            var publishingHouses = await _context.PublishingHouses.ToListAsync();
+
+            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames", book.AuthorId);
+            ViewBag.PublishingHouses = new SelectList(_context.PublishingHouses, "Id", "Name", book.PublishingHouseId);
+            return View(book);
+        }
+
+        private bool BookExists(int id)
+        {
+            return _context.Books.Any(e => e.Id == id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Book book)
+        {
+            if (id != book.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(book);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookExists(book.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            Console.WriteLine("ModelState is invalid. Errors:");
+            foreach (var kv in ModelState)
+            {
+                var key = kv.Key;
+                foreach (var err in kv.Value.Errors)
+                {
+                    Console.WriteLine($" - {key}: {err.ErrorMessage} {(err.Exception != null ? err.Exception.Message : "")}");
+                }
+            }
+
+            var authors = await _context.Authors.ToListAsync();
+            var publishingHouses = await _context.PublishingHouses.ToListAsync();
+            ViewBag.Authors = new SelectList(_context.Authors, "Id", "Surnames", book.AuthorId);
+            ViewBag.PublishingHouses = new SelectList(_context.PublishingHouses, "Id", "Name", book.PublishingHouseId);
+            return View(book);
+        }
     }
 }

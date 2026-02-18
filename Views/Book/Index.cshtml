@@ -10,7 +10,9 @@
     {
         <li>
             @* <a href="@Url.Action("Details", "Book", new { id = book.Id })">@book.Title</a> *@
-            <p>@book.Author - @book.Title</p> <br />
+            <p>@book.Author - @book.Title</p>
+            <a asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+            <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
         </li>
     }
 </ul>
